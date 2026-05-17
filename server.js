@@ -57,7 +57,7 @@ app.post("/api/contact", (req, res) => {
 
   }
 
-  // SQL Query
+  // Insert Query
   const sql = `
     INSERT INTO contacts (name, email, phone, message)
     VALUES (?, ?, ?, ?)
@@ -89,11 +89,11 @@ app.post("/api/contact", (req, res) => {
 
 });
 
-// Railway Dynamic Port
-const PORT = process.env.PORT;
+// Railway Port
+const PORT = process.env.PORT || 5000;
 
 // Start Server
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
 
   console.log(`🚀 Server running on port ${PORT}`);
 
