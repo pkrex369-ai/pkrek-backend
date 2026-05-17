@@ -20,7 +20,7 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.log("❌ DB Error:", err);
+    console.log("❌ DB Connection Failed:", err);
   } else {
     console.log("✅ Railway MySQL Connected");
   }
@@ -35,28 +35,29 @@ app.post("/api/contact", (req, res) => {
   const { name, email, phone, message } = req.body;
 
   if (!name || !email || !phone || !message) {
-    return res.json({
+    return res.status(400).json({
       status: false,
       message: "All fields required"
     });
   }
 
-  const sql =
-    "INSERT INTO contacts (name, email, phone, message) VALUES (?, ?, ?, ?)";
+  const sql = `
+    INSERT INTO contacts (name, email, phone, message)
+    VALUES (?, ?, ?, ?)
+  `;
 
   db.query(sql, [name, email, phone, message], (err, result) => {
 
     if (err) {
-      console.log(err);
+      console.log("DB INSERT ERROR:", err);
 
-      return res.json({
+      return res.status(500).json({
         status: false,
-        message: "Database Error",
-        error: err.message
+        message: "Database Error"
       });
     }
 
-    res.json({
+    return res.json({
       status: true,
       message: "Message saved successfully"
     });
@@ -65,8 +66,8 @@ app.post("/api/contact", (req, res) => {
 
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
