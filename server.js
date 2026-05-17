@@ -20,20 +20,26 @@ const db = mysql.createConnection({
   port: process.env.DB_PORT
 });
 
-// Connect DB
+// Connect Database
 db.connect((err) => {
 
   if (err) {
+
     console.log("❌ DB Connection Failed:", err);
+
   } else {
+
     console.log("✅ Railway MySQL Connected");
+
   }
 
 });
 
 // Home Route
 app.get("/", (req, res) => {
+
   res.send("PKREX Backend Running ✅");
+
 });
 
 // Contact API
@@ -51,7 +57,7 @@ app.post("/api/contact", (req, res) => {
 
   }
 
-  // Insert Query
+  // SQL Query
   const sql = `
     INSERT INTO contacts (name, email, phone, message)
     VALUES (?, ?, ?, ?)
@@ -83,10 +89,12 @@ app.post("/api/contact", (req, res) => {
 
 });
 
-// Railway Port
-const PORT = process.env.PORT || 5000;
+// Railway Dynamic Port
+const PORT = process.env.PORT;
 
 // Start Server
 app.listen(PORT, "0.0.0.0", () => {
+
   console.log(`🚀 Server running on port ${PORT}`);
+
 });
