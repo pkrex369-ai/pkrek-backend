@@ -1,20 +1,24 @@
-import mysql from "mysql2";
+import pkg from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-export const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+const { Pool } = pkg;
+
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-db.connect((err) => {
-  if (err) {
-    console.log("❌ DB Error:", err.message);
-  } else {
-    console.log("✅ Railway MySQL Connected");
-  }
-});
+db.connect()
+  .then(() => {
+    console.log(" Neon PostgreSQL Connected Successfully");
+  })
+  .catch((err) => {
+    console.error(" PostgreSQL Connection Error:");
+    console.error(err);
+  });
+
+export default db;
